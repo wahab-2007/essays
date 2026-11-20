@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#173a33">
+  <title>Essay Library</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="reader.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="./">Essay Library</a>
+    <a class="repository" href="https://github.com/wahab-2007/essays">Repository</a>
+  </header>
+  <main class="library">
+    <section class="index" aria-labelledby="browse">
+      <h1 id="browse">Browse essays</h1>
+      <form class="filters" role="search">
+        <label for="topic">Topic</label>
+        <select id="topic"><option value="">All topics</option></select>
+        <label for="search">Search</label>
+        <input id="search" type="search" placeholder="Title, topic or draft">
+      </form>
+      <p id="result-count" class="muted" aria-live="polite">Loading the library…</p>
+      <nav id="results" aria-label="Ranked drafts"></nav>
+    </section>
+    <section class="reader" id="reader" aria-labelledby="essay-title" hidden>
+      <header class="reader-header">
+        <p class="eyebrow" id="draft-info"></p>
+        <h2 id="essay-title" tabindex="-1"></h2>
+        <details class="ranking">
+          <summary>Why this rank?</summary>
+          <p id="strength"></p>
+          <p id="tradeoff"></p>
+        </details>
+        <div class="reader-bar">
+          <nav class="views" aria-label="Document view">
+            <a id="essay-view">Essay</a>
+            <a id="pdf-view">PDF</a>
+            <a id="slides-view">Slides</a>
+          </nav>
+          <a id="word-download" download>Download Word ↓</a>
+        </div>
+      </header>
+      <article id="essay"></article>
+      <div id="preview" hidden>
+        <div class="preview-links">
+          <a id="open-pdf" target="_blank" rel="noopener">Open PDF</a>
+          <a id="original-slides" download hidden>Download PowerPoint ↓</a>
+        </div>
+      </div>
+      <footer class="reader-footer"><a id="original">Original draft on GitHub</a></footer>
+    </section>
+    <noscript><p>Enable JavaScript to browse the library or <a href="https://github.com/wahab-2007/essays/tree/main/ranked-essays">open the ranked essays on GitHub</a>.</p></noscript>
+  </main>
+</body>
+</html>
