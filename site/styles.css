@@ -1,13 +1,14 @@
 :root {
-  color-scheme: light;
-  --paper: #faf8f2;
-  --surface: #fffefb;
-  --ink: #202e28;
-  --muted: #53635a;
-  --pine: #173a33;
-  --rule: #dcded3;
-  --soft: #edf1e8;
-  --mark: #f5daa0;
+  color-scheme: dark;
+  --masthead: #142620;
+  --paper: #101714;
+  --surface: #19231f;
+  --ink: #e8eee9;
+  --muted: #aabcb1;
+  --pine: #a8dbc5;
+  --rule: #38483f;
+  --soft: #283a32;
+  --mark: #d9bb7b;
   font-family: system-ui, sans-serif;
   background: var(--paper);
   color: var(--ink);
@@ -24,7 +25,7 @@ a { color: var(--pine); text-underline-offset: .19em; }
   align-items: center;
   gap: 1rem;
   padding: .95rem max(5vw, calc((100% - 80rem) / 2));
-  background: var(--pine);
+  background: var(--masthead);
   border-bottom: 3px solid var(--mark);
 }
 .site-header a { color: white; text-decoration: none; }
