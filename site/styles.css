@@ -17,7 +17,7 @@
 body { margin: 0; }
 a { color: var(--pine); text-underline-offset: .19em; }
 [hidden] { display: none !important; }
-:focus-visible { outline: 2px solid #427a64; outline-offset: 4px; }
+:focus-visible { outline: 2px solid var(--mark); outline-offset: 4px; }
 
 .site-header {
   display: flex;
@@ -49,12 +49,13 @@ a { color: var(--pine); text-underline-offset: .19em; }
 .filters input, .filters select {
   width: 100%;
   padding: .65rem .7rem;
-  border: 1px solid #a6b3a7;
+  border: 1px solid #687f73;
   border-radius: .3rem;
   font: inherit;
   background: var(--surface);
   color: var(--ink);
 }
+.filters input::placeholder { color: var(--muted); }
 .filters select { margin-bottom: .45rem; }
 .muted, .eyebrow { font-size: .82rem; color: var(--muted); }
 #results {
@@ -62,7 +63,7 @@ a { color: var(--pine); text-underline-offset: .19em; }
   max-height: 58vh;
   overflow-y: auto;
   padding: .22rem;
-  scrollbar-color: #a2afa1 transparent;
+  scrollbar-color: #687f73 transparent;
 }
 .result {
   display: grid;
