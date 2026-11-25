@@ -127,6 +127,7 @@ function renderEssay(entry, view, against) {
   const files = "files/" + entry.rank + "/";
   get("draft-info").textContent = entry.topic + " · Draft " + entry.code + " · Rank " + entry.rank;
   get("essay-title").textContent = entry.title;
+  document.title = entry.title + " | Essay Library";
   get("thesis").textContent = entry.brief.thesis;
   get("example").textContent = entry.brief.example;
   get("fit").textContent = entry.brief.fit;
@@ -236,8 +237,8 @@ async function load() {
   get("sort").addEventListener("change", () => renderList(selection()[0]));
   get("search").addEventListener("input", () => renderList(selection()[0]));
   let focusReader = false;
-  get("results").addEventListener("click", (event) => {
-    const link = event.target.closest("a");
+  document.addEventListener("click", (event) => {
+    const link = event.target.closest("#results a, .pick, #read-full, #quick-compare, #compare-cards a");
     if (!link || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
     if (link.hash === location.hash) get("essay-title").focus();
     else focusReader = true;
