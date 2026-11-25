@@ -36,17 +36,17 @@ a { color: var(--pine); text-underline-offset: .19em; }
 .library {
   max-width: 80rem;
   width: 90%;
-  margin: 2.25rem auto 4rem;
+  margin: 1.75rem auto 4rem;
   display: grid;
   grid-template-columns: minmax(15rem, 19rem) minmax(0, 1fr);
   gap: clamp(1.35rem, 4vw, 4rem);
   align-items: start;
 }
 .index { min-width: 0; }
-.index h1 { font: 700 1.7rem Georgia, serif; margin: 0 0 1rem; }
+.index h2 { font: 700 1.7rem Georgia, serif; margin: 0 0 1rem; }
 .filters { display: grid; gap: .35rem; }
 .filters label { font-size: .82rem; font-weight: 650; }
-.filters input, .filters select {
+.filters input[type="search"], select {
   width: 100%;
   padding: .65rem .7rem;
   border: 1px solid #687f73;
@@ -94,9 +94,6 @@ a { color: var(--pine); text-underline-offset: .19em; }
   font: 700 clamp(2rem, 4vw, 3.5rem)/1.05 Georgia, serif;
   text-wrap: balance;
 }
-.ranking { margin-bottom: 1rem; font-size: .88rem; color: var(--muted); }
-.ranking summary { cursor: pointer; font-weight: 650; }
-.ranking p { margin: .55rem 0; max-width: 65ch; }
 .reader-bar, .views, .preview-links { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
 .reader-bar {
   justify-content: space-between;
@@ -122,9 +119,73 @@ article p { margin: 0 0 1rem; max-width: 72ch; }
 .preview-links { background: var(--soft); border-bottom: 1px solid var(--rule); padding: .8rem clamp(1.1rem, 4vw, 3.4rem); font-size: .88rem; }
 iframe { display: block; width: 100%; height: max(30rem, 72vh); border: 0; background: var(--paper); }
 
+.start { grid-column: 1 / -1; }
+.start h1 { font: 700 clamp(1.9rem, 3.5vw, 2.9rem) Georgia, serif; margin: 0 0 1rem; }
+.shortlist, .decision-grid { display: grid; gap: .8rem; }
+.shortlist { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.pick {
+  display: flex;
+  flex-direction: column;
+  gap: .42rem;
+  padding: .85rem 1rem;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: .5rem;
+  text-decoration: none;
+  line-height: 1.4;
+}
+.pick:hover { border-color: var(--pine); background: var(--soft); }
+.pick .eyebrow { margin: 0; color: var(--mark); }
+.draft-label, .decision-actions { display: flex; align-items: baseline; gap: .75rem 1rem; flex-wrap: wrap; }
+.draft-label { justify-content: space-between; margin-bottom: .75rem; }
+.draft-label .eyebrow { margin: 0; }
+.saved-filter, #save-draft { cursor: pointer; }
+.saved-filter { display: flex; align-items: center; gap: .4rem; }
+#save-draft {
+  padding: .37rem .68rem;
+  border: 1px solid var(--rule);
+  border-radius: .35rem;
+  color: var(--pine);
+  background: var(--paper);
+  font: 650 .8rem system-ui, sans-serif;
+}
+#save-draft[aria-pressed="true"] { color: var(--masthead); background: var(--pine); }
+.decision { padding: clamp(1.1rem, 4vw, 2rem) clamp(1.1rem, 4vw, 3.4rem); }
+.takeaway, .decision-card {
+  padding: 1rem;
+  border-radius: .4rem;
+  line-height: 1.55;
+}
+.takeaway { background: var(--soft); border-left: 3px solid var(--mark); }
+.decision-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: .8rem; }
+.decision-card { background: var(--paper); border: 1px solid var(--rule); overflow-wrap: anywhere; }
+.takeaway h3, .decision-card h3 { margin: 0 0 .4rem; font-size: 1.04rem; color: var(--pine); }
+.decision-card h4 { margin: .85rem 0 .22rem; color: var(--mark); font-size: .8rem; }
+.takeaway p, .decision-card p { margin: 0; }
+.decision-card .eyebrow { margin-bottom: .5rem; }
+.decision-card a { display: inline-block; margin-top: .9rem; }
+.decision-actions { margin-bottom: 0; font-weight: 650; }
+#compare label { display: block; font-weight: 650; margin-bottom: .38rem; }
+#essay-section { width: auto; max-width: 100%; }
+#essay h3 { scroll-margin-top: 1rem; }
+
+@media (min-width: 48rem) {
+  .index { position: sticky; top: 1rem; }
+  #results { max-height: max(13rem, calc(100dvh - 24rem)); }
+}
+
+@media (max-width: 63rem) {
+  .shortlist { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
 @media (max-width: 47rem) {
   .library { grid-template-columns: minmax(0, 1fr); margin-top: 1.5rem; }
   #results { max-height: 14rem; }
   .reader h2 { max-width: 26ch; }
   article { font-size: 1.05rem; }
+}
+
+@media (max-width: 33rem) {
+  .decision-grid { grid-template-columns: minmax(0, 1fr); }
+  .pick { padding: .68rem; font-size: .87rem; }
 }
