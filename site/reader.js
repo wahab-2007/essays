@@ -13,12 +13,19 @@ function selection() {
 function renderList(active) {
   const topic = get("topic").value;
   const query = get("search").value.trim().toLowerCase();
-  const matches = entries.filter((entry) => (!topic || entry.topic === topic) &&
-    (entry.title + " " + entry.topic + " " + entry.code).toLowerCase().includes(query));
+  const terms = query.split(/\s+/).filter(Boolean);
+  const matches = entries.filter((entry) => {
+    const target = [entry.title, entry.topic, entry.code, entry.brief.thesis,
+      entry.brief.example, entry.brief.fit].join(" ").toLowerCase();
+    return (!topic || entry.topic === topic) && terms.every((term) => target.includes(term));
+  });
+  const byDraft = get("sort").value === "draft";
+  if (byDraft) matches.sort((a, b) => a.code.localeCompare(b.code));
 
   get("result-count").textContent = matches.length
-    ? matches.length + (matches.length === 1 ? " draft" : " drafts") + " · Ranked by recommendation"
-    : "No drafts match this search.";
+    ? matches.length + (matches.length === 1 ? " draft" : " drafts") +
+      (byDraft ? " · By topic and draft" : " · By recommendation")
+    : "No drafts match these filters.";
 
   get("results").replaceChildren(...matches.map((entry) => {
     const link = document.createElement("a");
@@ -163,6 +170,7 @@ async function load() {
 
   document.querySelector(".filters").addEventListener("submit", (event) => event.preventDefault());
   get("topic").addEventListener("change", () => renderList(selection()[0]));
+  get("sort").addEventListener("change", () => renderList(selection()[0]));
   get("search").addEventListener("input", () => renderList(selection()[0]));
   let focusReader = false;
   get("results").addEventListener("click", (event) => {

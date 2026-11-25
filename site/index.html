@@ -21,7 +21,12 @@
         <label for="topic">Topic</label>
         <select id="topic"><option value="">All topics</option></select>
         <label for="search">Search</label>
-        <input id="search" type="search" placeholder="Title, topic or draft">
+        <input id="search" type="search" placeholder="Title, topic or idea">
+        <label for="sort">Sort by</label>
+        <select id="sort">
+          <option value="rank">Recommendation</option>
+          <option value="draft">Topic and draft number</option>
+        </select>
       </form>
       <p id="result-count" class="muted" aria-live="polite">Loading the library…</p>
       <nav id="results" aria-label="Ranked drafts"></nav>
