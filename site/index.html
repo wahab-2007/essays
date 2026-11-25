@@ -31,13 +31,17 @@
           <option value="rank">Recommendation</option>
           <option value="draft">Topic and draft number</option>
         </select>
+        <label class="saved-filter"><input id="saved-only" type="checkbox"> Saved drafts only</label>
       </form>
       <p id="result-count" class="muted" aria-live="polite">Loading the library…</p>
       <nav id="results" aria-label="Ranked drafts"></nav>
     </section>
     <section class="reader" id="reader" aria-labelledby="essay-title" hidden>
       <header class="reader-header">
-        <p class="eyebrow" id="draft-info"></p>
+        <div class="draft-label">
+          <p class="eyebrow" id="draft-info"></p>
+          <button id="save-draft" type="button" aria-pressed="false">Save draft</button>
+        </div>
         <h2 id="essay-title" tabindex="-1"></h2>
         <div class="reader-bar">
           <nav class="views" aria-label="Document view">

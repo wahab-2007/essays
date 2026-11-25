@@ -3,6 +3,13 @@ const repository = "https://github.com/wahab-2007/essays/tree/main/";
 const views = ["summary", "essay", "pdf", "slides", "compare"];
 const route = (entry, view = "summary") => "#draft-" + entry.code + (view === "summary" ? "" : "/" + view);
 let entries = [];
+const saved = new Set();
+try {
+  const stored = JSON.parse(localStorage.getItem("essay-library-saved") || "[]");
+  if (Array.isArray(stored)) for (const code of stored) saved.add(code);
+} catch {
+  // Saving is still available for this visit if browser storage is unavailable.
+}
 
 function selection() {
   const [draft, view, against] = location.hash.slice(1).split("/");
@@ -12,12 +19,13 @@ function selection() {
 
 function renderList(active) {
   const topic = get("topic").value;
+  const savedOnly = get("saved-only").checked;
   const query = get("search").value.trim().toLowerCase();
   const terms = query.split(/\s+/).filter(Boolean);
   const matches = entries.filter((entry) => {
     const target = [entry.title, entry.topic, entry.code, entry.brief.thesis,
       entry.brief.example, entry.brief.fit].join(" ").toLowerCase();
-    return (!topic || entry.topic === topic) && terms.every((term) => target.includes(term));
+    return (!topic || entry.topic === topic) && (!savedOnly || saved.has(entry.code)) && terms.every((term) => target.includes(term));
   });
   const byDraft = get("sort").value === "draft";
   if (byDraft) matches.sort((a, b) => a.code.localeCompare(b.code));
@@ -96,7 +104,26 @@ function renderComparison(entry, against) {
   }));
 }
 
+function renderSaveButton(entry) {
+  const button = get("save-draft");
+  const isSaved = saved.has(entry.code);
+  button.textContent = isSaved ? "Saved" : "Save draft";
+  button.setAttribute("aria-pressed", String(isSaved));
+  button.onclick = () => {
+    if (saved.has(entry.code)) saved.delete(entry.code);
+    else saved.add(entry.code);
+    try {
+      localStorage.setItem("essay-library-saved", JSON.stringify([...saved]));
+    } catch {
+      // Keep the selection in memory for this visit.
+    }
+    renderSaveButton(entry);
+    renderList(entry);
+  };
+}
+
 function renderEssay(entry, view, against) {
+  renderSaveButton(entry);
   const files = "files/" + entry.rank + "/";
   get("draft-info").textContent = entry.topic + " · Draft " + entry.code + " · Rank " + entry.rank;
   get("essay-title").textContent = entry.title;
@@ -205,6 +232,7 @@ async function load() {
 
   document.querySelector(".filters").addEventListener("submit", (event) => event.preventDefault());
   get("topic").addEventListener("change", () => renderList(selection()[0]));
+  get("saved-only").addEventListener("change", () => renderList(selection()[0]));
   get("sort").addEventListener("change", () => renderList(selection()[0]));
   get("search").addEventListener("input", () => renderList(selection()[0]));
   let focusReader = false;
