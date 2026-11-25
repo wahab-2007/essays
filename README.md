@@ -3,6 +3,10 @@
 - [Ranked drafts and recommendations](ranked-essays/)
 - [Essay Library source](site/)
 
+## Use the library
+
+Start with a suggested draft or browse by topic. Each draft opens with its main point, a worked example and a trade-off. Use **Compare** to weigh two drafts side by side, or open **Full essay** and jump to the section you need. You can save drafts in your browser and use **Saved drafts only** to narrow your decision.
+
 ## Publish the library
 
 In the repository's **Settings → Pages**, set **Source** to **GitHub Actions**. Then run **Deploy essay library** from the Actions tab. Future pushes to main rebuild the site. GitHub displays the published address in the deployment summary.
