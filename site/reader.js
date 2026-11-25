@@ -1,13 +1,13 @@
 const get = (id) => document.getElementById(id);
 const repository = "https://github.com/wahab-2007/essays/tree/main/";
-const views = ["summary", "essay", "pdf", "slides"];
+const views = ["summary", "essay", "pdf", "slides", "compare"];
 const route = (entry, view = "summary") => "#draft-" + entry.code + (view === "summary" ? "" : "/" + view);
 let entries = [];
 
 function selection() {
-  const [draft, view] = location.hash.slice(1).split("/");
+  const [draft, view, against] = location.hash.slice(1).split("/");
   return [entries.find((entry) => draft === "draft-" + entry.code) || entries[0],
-    views.includes(view) ? view : "summary"];
+    views.includes(view) ? view : "summary", against];
 }
 
 function renderList(active) {
@@ -35,7 +35,61 @@ function renderList(active) {
   }));
 }
 
-function renderEssay(entry, view) {
+function compareRoute(entry, other) {
+  return route(entry, "compare") + "/" + other.code;
+}
+
+function renderComparison(entry, against) {
+  const alternatives = entries.filter((other) => other !== entry);
+  const other = alternatives.find((item) => item.code === against) ||
+    alternatives.find((item) => item.topic === entry.topic) || alternatives[0];
+  const rankedFirst = entry.rank < other.rank ? entry : other;
+  const alternate = rankedFirst === entry ? other : entry;
+  const select = get("comparison");
+  select.replaceChildren(...alternatives.map((item) => new Option(
+    item.code + " · " + item.title, item.code, false, item === other
+  )));
+  select.onchange = () => {
+    const choice = alternatives.find((item) => item.code === select.value);
+    if (choice) location.hash = compareRoute(entry, choice);
+  };
+
+  const recommendation = get("recommendation");
+  recommendation.replaceChildren();
+  const lead = document.createElement("strong");
+  lead.textContent = "Start with " + rankedFirst.code + " (rank " + rankedFirst.rank + "). ";
+  recommendation.append(lead, rankedFirst.strength + " Pick " + alternate.code + " if " +
+    alternate.brief.fit.charAt(0).toLowerCase() + alternate.brief.fit.slice(1));
+
+  get("compare-cards").replaceChildren(...[entry, other].map((draft) => {
+    const card = document.createElement("section");
+    card.className = "decision-card";
+    const heading = document.createElement("h3");
+    heading.textContent = draft.title;
+    const label = document.createElement("p");
+    label.className = "eyebrow";
+    label.textContent = "Draft " + draft.code + " · Rank " + draft.rank;
+    card.append(label, heading);
+    for (const [label, value] of [
+      ["Choose it if", draft.brief.fit],
+      ["Worked example", draft.brief.example],
+      ["Trade-off", draft.tradeoff],
+    ]) {
+      const term = document.createElement("h4");
+      term.textContent = label;
+      const description = document.createElement("p");
+      description.textContent = value;
+      card.append(term, description);
+    }
+    const link = document.createElement("a");
+    link.href = route(draft, "essay");
+    link.textContent = "Read full essay";
+    card.append(link);
+    return card;
+  }));
+}
+
+function renderEssay(entry, view, against) {
   const files = "files/" + entry.rank + "/";
   get("draft-info").textContent = entry.topic + " · Draft " + entry.code + " · Rank " + entry.rank;
   get("essay-title").textContent = entry.title;
@@ -43,6 +97,7 @@ function renderEssay(entry, view) {
   get("example").textContent = entry.brief.example;
   get("fit").textContent = entry.brief.fit;
   get("read-full").href = route(entry, "essay");
+  get("quick-compare").href = route(entry, "compare");
   get("strength").textContent = entry.strength;
   get("tradeoff").textContent = entry.tradeoff;
   get("original").href = repository + entry.original;
@@ -57,6 +112,7 @@ function renderEssay(entry, view) {
   }
 
   get("summary").hidden = view !== "summary";
+  get("compare").hidden = view !== "compare";
   get("essay").hidden = view !== "essay";
   get("preview").hidden = !["pdf", "slides"].includes(view);
   get("viewer")?.remove();
@@ -75,6 +131,8 @@ function renderEssay(entry, view) {
       }
       return paragraph;
     }));
+  } else if (view === "compare") {
+    renderComparison(entry, against);
   } else if (view === "pdf" || view === "slides") {
     const preview = files + (view === "slides" ? "slides.pdf" : "essay.pdf");
     const frame = document.createElement("iframe");
@@ -91,9 +149,9 @@ function renderEssay(entry, view) {
 }
 
 function showRoute() {
-  const [entry, view] = selection();
+  const [entry, view, against] = selection();
   renderList(entry);
-  renderEssay(entry, view);
+  renderEssay(entry, view, against);
 }
 
 async function load() {

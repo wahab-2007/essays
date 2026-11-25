@@ -36,6 +36,7 @@
             <a id="essay-view">Full essay</a>
             <a id="pdf-view">PDF</a>
             <a id="slides-view">Slides</a>
+            <a id="compare-view">Compare</a>
           </nav>
           <a id="word-download" download>Download Word ↓</a>
         </div>
@@ -65,7 +66,13 @@
             <p id="tradeoff"></p>
           </div>
         </div>
-        <p><a id="read-full">Read the full essay</a></p>
+        <p class="decision-actions"><a id="read-full">Read the full essay</a><a id="quick-compare">Compare with another draft</a></p>
+      </section>
+      <section id="compare" class="decision" hidden aria-label="Compare drafts">
+        <label for="comparison">Compare against</label>
+        <select id="comparison"></select>
+        <p id="recommendation" class="takeaway"></p>
+        <div id="compare-cards" class="decision-grid"></div>
       </section>
       <article id="essay"></article>
       <div id="preview" hidden>
