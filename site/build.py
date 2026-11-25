@@ -1,6 +1,7 @@
 """Build the static library from the ranking and original slide decks."""
 
 import argparse
+import csv
 import json
 import re
 import shutil
@@ -54,6 +55,17 @@ def build(output):
     if [int(row[0]) for row in rows] != list(range(1, len(rows) + 1)) or not rows:
         raise ValueError("The ranked essay table must have consecutive ranks beginning at 1.")
 
+    with (ROOT / "site" / "briefs.tsv").open(encoding="utf-8", newline="") as source:
+        briefs = {}
+        for brief in csv.DictReader(source, delimiter="\t"):
+            code = brief.pop("draft")
+            if code in briefs or not all(brief.get(field) for field in ("thesis", "example", "fit")):
+                raise ValueError(f"Invalid or duplicate brief for {code}.")
+            briefs[code] = brief
+    codes = {row[2] for row in rows}
+    if codes != briefs.keys() or len(codes) != len(rows):
+        raise ValueError("Every ranked draft must have one short guide.")
+
     entries = []
     with tempfile.TemporaryDirectory(prefix="essay-slides-") as workspace:
         profile = (Path(workspace) / "libreoffice").as_uri()
@@ -76,7 +88,7 @@ def build(output):
             topic = folder.parent.name.split(" - ", 1)[1]
             entries.append({"rank": int(rank), "title": title, "code": code, "topic": topic,
                             "original": original, "strength": strength, "tradeoff": tradeoff,
-                            "paragraphs": read_essay(word)})
+                            "brief": briefs[code], "paragraphs": read_essay(word)})
 
     (output / "catalog.json").write_text(json.dumps(entries, ensure_ascii=False), encoding="utf-8")
     print(f"Built the library with {len(entries)} essays and presentations.")
