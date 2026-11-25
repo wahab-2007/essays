@@ -30,11 +30,6 @@
       <header class="reader-header">
         <p class="eyebrow" id="draft-info"></p>
         <h2 id="essay-title" tabindex="-1"></h2>
-        <details class="ranking">
-          <summary>Why this rank?</summary>
-          <p id="strength"></p>
-          <p id="tradeoff"></p>
-        </details>
         <div class="reader-bar">
           <nav class="views" aria-label="Document view">
             <a id="summary-view">Quick take</a>
@@ -45,7 +40,33 @@
           <a id="word-download" download>Download Word ↓</a>
         </div>
       </header>
-      <section id="summary" hidden aria-label="Quick take"></section>
+      <section id="summary" class="decision" hidden aria-label="Quick take">
+        <div class="takeaway">
+          <h3>Main point</h3>
+          <p id="thesis"></p>
+        </div>
+        <div class="decision-grid">
+          <div class="decision-card">
+            <h3>Choose this if</h3>
+            <p id="fit"></p>
+          </div>
+          <div class="decision-card">
+            <h3>Example you can present</h3>
+            <p id="example"></p>
+          </div>
+        </div>
+        <div class="decision-grid">
+          <div class="decision-card">
+            <h3>Why it ranks here</h3>
+            <p id="strength"></p>
+          </div>
+          <div class="decision-card">
+            <h3>Trade-off</h3>
+            <p id="tradeoff"></p>
+          </div>
+        </div>
+        <p><a id="read-full">Read the full essay</a></p>
+      </section>
       <article id="essay"></article>
       <div id="preview" hidden>
         <div class="preview-links">

@@ -39,6 +39,10 @@ function renderEssay(entry, view) {
   const files = "files/" + entry.rank + "/";
   get("draft-info").textContent = entry.topic + " · Draft " + entry.code + " · Rank " + entry.rank;
   get("essay-title").textContent = entry.title;
+  get("thesis").textContent = entry.brief.thesis;
+  get("example").textContent = entry.brief.example;
+  get("fit").textContent = entry.brief.fit;
+  get("read-full").href = route(entry, "essay");
   get("strength").textContent = entry.strength;
   get("tradeoff").textContent = entry.tradeoff;
   get("original").href = repository + entry.original;
