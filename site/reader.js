@@ -155,6 +155,31 @@ function renderEssay(entry, view, against) {
   get("reader").hidden = false;
 }
 
+function renderShortlist() {
+  const picks = [
+    ["5-5", "Visual demonstration"],
+    ["3-5", "Software engineering"],
+    ["4-5", "Classroom research"],
+    ["6-2", "Ethics and numbers"],
+  ];
+  const links = picks.flatMap(([code, label]) => {
+    const entry = entries.find((draft) => draft.code === code);
+    if (!entry) return [];
+    const link = document.createElement("a");
+    link.className = "pick";
+    link.href = route(entry);
+    const category = document.createElement("span");
+    category.className = "eyebrow";
+    category.textContent = label + " · " + code;
+    const title = document.createElement("strong");
+    title.textContent = entry.title;
+    link.append(category, title);
+    return [link];
+  });
+  get("shortlist").replaceChildren(...links);
+  get("start").hidden = !links.length;
+}
+
 function showRoute() {
   const [entry, view, against] = selection();
   renderList(entry);
@@ -165,6 +190,7 @@ async function load() {
   const response = await fetch("catalog.json");
   if (!response.ok) throw new Error("The document catalogue is unavailable.");
   entries = await response.json();
+  renderShortlist();
   const topics = [...new Set(entries.map((entry) => entry.topic))].sort((a, b) => a.localeCompare(b));
   for (const topic of topics) get("topic").append(new Option(topic, topic));
 
