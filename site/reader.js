@@ -1,13 +1,13 @@
 const get = (id) => document.getElementById(id);
 const repository = "https://github.com/wahab-2007/essays/tree/main/";
-const views = ["essay", "pdf", "slides"];
-const route = (entry, view = "essay") => "#draft-" + entry.code + (view === "essay" ? "" : "/" + view);
+const views = ["summary", "essay", "pdf", "slides"];
+const route = (entry, view = "summary") => "#draft-" + entry.code + (view === "summary" ? "" : "/" + view);
 let entries = [];
 
 function selection() {
   const [draft, view] = location.hash.slice(1).split("/");
   return [entries.find((entry) => draft === "draft-" + entry.code) || entries[0],
-    views.includes(view) ? view : "essay"];
+    views.includes(view) ? view : "summary"];
 }
 
 function renderList(active) {
@@ -52,8 +52,9 @@ function renderEssay(entry, view) {
     else link.removeAttribute("aria-current");
   }
 
+  get("summary").hidden = view !== "summary";
   get("essay").hidden = view !== "essay";
-  get("preview").hidden = view === "essay";
+  get("preview").hidden = !["pdf", "slides"].includes(view);
   get("viewer")?.remove();
   if (view === "essay") {
     get("essay").replaceChildren(...entry.paragraphs.map(({ heading, parts }) => {
@@ -70,7 +71,7 @@ function renderEssay(entry, view) {
       }
       return paragraph;
     }));
-  } else {
+  } else if (view === "pdf" || view === "slides") {
     const preview = files + (view === "slides" ? "slides.pdf" : "essay.pdf");
     const frame = document.createElement("iframe");
     frame.id = "viewer";
