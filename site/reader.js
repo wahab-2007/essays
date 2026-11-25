@@ -121,6 +121,7 @@ function renderEssay(entry, view, against) {
   get("summary").hidden = view !== "summary";
   get("compare").hidden = view !== "compare";
   get("essay").hidden = view !== "essay";
+  get("essay-navigation").hidden = view !== "essay";
   get("preview").hidden = !["pdf", "slides"].includes(view);
   get("viewer")?.remove();
   if (view === "essay") {
@@ -138,6 +139,14 @@ function renderEssay(entry, view, against) {
       }
       return paragraph;
     }));
+    const headings = [...get("essay").querySelectorAll("h3")];
+    for (const heading of headings) heading.tabIndex = -1;
+    const sections = get("essay-section");
+    sections.replaceChildren(new Option("Select a section", ""),
+      ...headings.map((heading, index) => new Option(heading.textContent, index)));
+    sections.onchange = () => {
+      if (sections.value !== "") headings[Number(sections.value)].focus();
+    };
   } else if (view === "compare") {
     renderComparison(entry, against);
   } else if (view === "pdf" || view === "slides") {
